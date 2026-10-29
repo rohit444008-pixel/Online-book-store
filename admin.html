@@ -1,38 +1,53 @@
 <!DOCTYPE html>
 <html lang="hi">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Manage Orders</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subharti TechBooks - Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .admin-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+    .table-wrapper { overflow-x: auto; margin-top: 20px; }
+    admin-table { width: 100%; border-collapse: collapse; background: white; }
+    table th, table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    table th { background: #004085; color: white; }
+    .btn-accept { background: #28a745; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
+    .btn-reject { background: #dc3545; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
+    .status-pending { color: #ffc107; font-weight: bold; }
+    .status-accepted { color: #28a745; font-weight: bold; }
+    .status-rejected { color: #dc3545; font-weight: bold; }
+    .back-home { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #004085; font-weight: bold; }
+  </style>
 </head>
-
 <body>
+
   <header>
-    <a href="#" class="logo">Admin <span>Dashboard</span></a>
+    <a href="index.html" class="logo">Subharti<span>TechBooks [Admin]</span></a>
   </header>
 
-  <div class="container">
-    <h2 class="section-title">Live Orders Management</h2>
+  <div class="admin-container">
+    <a href="index.html" class="back-home">← Back to Store</a>
+    <h2>Library Orders Management Dashboard</h2>
+    <p>Aap yahan students ke saare incoming orders dekh aur manage kar sakte hain.</p>
 
-    <div class="table-responsive">
-      <table>
+    <div class="table-wrapper">
+      <table id="ordersTable">
         <thead>
           <tr>
             <th>Order ID</th>
-            <th>Customer Name</th>
+            <th>Student Name</th>
             <th>Phone</th>
             <th>Book Title</th>
             <th>Price</th>
             <th>Address</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th>Action</th>
           </tr>
         </thead>
-        <tbody id="ordersTable">
-          <!-- Live orders here -->
+        <tbody id="ordersBody">
+          <tr><td colspan="8" style="text-align: center;">Loading orders...</td></tr>
         </tbody>
       </table>
     </div>
@@ -41,62 +56,66 @@
   <script>
     const SUPABASE_URL = "https://ddtbqlalhfokedxbhdhj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_egINPJu1IQV6kYN4EXLF3A_8pIpi6qz";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function loadOrders() {
-      const { data: orders, error } = await supabaseClient
+    async function fetchOrders() {
+      const { data, error } = await _supabase
         .from('orders')
         .select('*')
-        .order('id', { ascending: false });
+        .order('created_at', { ascending: false });
+
+      const tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = '';
 
       if (error) {
-        console.error(error);
+        tbody.innerHTML = `<tr><td colspan="8" style="color: red; text-align: center;">Error loading orders: ${error.message}</td></tr>`;
         return;
       }
 
-      const tableBody = document.getElementById('ordersTable');
-      tableBody.innerHTML = '';
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center;">No orders found yet.</td></tr>`;
+        return;
+      }
 
-      orders.forEach(order => {
-        const row = document.createElement('tr');
-        const status = order.status || 'Pending';
+      data.forEach(order => {
+        let statusClass = 'status-pending';
+        if (order.status === 'Accepted') statusClass = 'status-accepted';
+        if (order.status === 'Rejected') statusClass = 'status-rejected';
 
-        row.innerHTML = `
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
           <td>#${order.id}</td>
           <td>${order.customer_name}</td>
           <td>${order.phone}</td>
           <td>${order.book_title}</td>
           <td>₹${order.price}</td>
           <td>${order.address}</td>
-          <td><span class="badge badge-${status.toLowerCase()}">${status}</span></td>
+          <td><span class="${statusClass}">${order.status}</span></td>
           <td>
-            ${status === 'Pending' ? `
-              <button onclick="updateOrderStatus(${order.id}, 'Accepted')" class="btn-accept">Accept</button>
-              <button onclick="updateOrderStatus(${order.id}, 'Rejected')" class="btn-reject">Reject</button>
-            ` : 'Done'}
+            <button class="btn-accept" onclick="updateStatus(${order.id}, 'Accepted')">Accept</button>
+            <button class="btn-reject" onclick="updateStatus(${order.id}, 'Rejected')">Reject</button>
           </td>
         `;
-
-        tableBody.appendChild(row);
+        tbody.appendChild(tr);
       });
     }
 
-    async function updateOrderStatus(orderId, newStatus) {
-      const { error } = await supabaseClient
+    async function updateStatus(id, newStatus) {
+      const { error } = await _supabase
         .from('orders')
         .update({ status: newStatus })
-        .eq('id', orderId);
+        .eq('id', id);
 
       if (error) {
-        alert('Update Failed: ' + error.message);
+        alert('Status update karne mein error aayi: ' + error.message);
       } else {
-        alert(`Order #${orderId} is now ${newStatus}`);
-        loadOrders();
+        alert(`Order #${id} has been ${newStatus}!`);
+        fetchOrders(); // Refresh table
       }
     }
 
-    loadOrders();
+    // Load orders on page open
+    fetchOrders();
   </script>
 </body>
-
 </html>
