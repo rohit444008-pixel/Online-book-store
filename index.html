@@ -196,7 +196,6 @@
   </div>
 
   <script>
-   <script>
     const SUPABASE_URL = "https://ddtbqlalhfokedxbhdhj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_egINPJu1IQV6kYN4EXLF3A_8pIpi6qz";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -215,7 +214,6 @@
       const phone = document.getElementById('custPhone').value;
       const address = document.getElementById('custAddress').value;
 
-      // Check karein ki book select hui hai ya nahi
       if (!bookTitle) {
         alert('Pehle koi book "Buy Now" karke select karein!');
         return;
@@ -239,10 +237,9 @@
       } else {
         alert('🎉 Order Successfully Placed! Aapke paas confirmation aa jayegi.');
         document.getElementById('orderForm').reset();
-        window.location.href = '#'; // Modal close
+        window.location.href = '#'; 
       }
     });
-  </script>
   </script>
 </body>
 </html>
