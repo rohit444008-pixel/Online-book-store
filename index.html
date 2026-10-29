@@ -203,8 +203,6 @@
     function selectBook(title, price) {
       document.getElementById('selectedBook').value = title;
       document.getElementById('selectedPrice').value = price;
-      
-      // Yeh line ensure karegi ki click hote hi modal smoothly khul jaye
       window.location.href = '#checkout-modal';
     }
 
@@ -222,6 +220,8 @@
         return;
       }
 
+      console.log("Submitting order...", { bookTitle, bookPrice, name, phone, address });
+
       const { data, error } = await _supabase
         .from('orders')
         .insert([
@@ -236,9 +236,10 @@
         ]);
 
       if (error) {
+        console.error("Supabase Error:", error);
         alert('Order Fail Ho Gaya: ' + error.message);
       } else {
-        alert('🎉 Order Successfully Placed! Aapke paas confirmation aa jayegi.');
+        alert('🎉 Order Successfully Placed!');
         document.getElementById('orderForm').reset();
         window.location.href = '#'; 
       }
