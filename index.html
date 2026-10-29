@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subharti TechBooks - Engineering Store</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <div class="top-bar">🔥 SUBHARTI SPECIAL OFFER: Engineering Books Up To 40% OFF!</div>
+
+  <header>
+    <a href="#" class="logo">Subharti<span>TechBooks</span></a>
+    <div class="cart-btn-wrapper">
+      <a href="#checkout-modal" class="cart-btn">🛒 Checkout</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>All Engineering Department Books Under One Roof</h1>
+    <p>CSE, ME, ECE, Civil, EE, AI & DS — Lowest Price Guaranteed!</p>
+  </section>
+
+  <div class="container">
+    <h2 class="section-title">All Engineering Branches & Books Directory</h2>
+
+    <div class="books-grid">
+      <div class="book-card">
+        <span class="offer-badge">35% OFF</span>
+        <div class="book-thumb">CSE</div>
+        <div class="book-details">
+          <span class="branch-tag">Computer Science</span>
+          <h3 class="book-title">Introduction to Algorithms</h3>
+          <p class="book-author">By Thomas H. Cormen</p>
+          <div class="price-box">
+            <span class="current-price">₹650</span>
+            <span class="original-price">₹999</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Introduction to Algorithms', 650)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">30% OFF</span>
+        <div class="book-thumb">CSE</div>
+        <div class="book-details">
+          <span class="branch-tag">Computer Science</span>
+          <h3 class="book-title">Operating System Concepts</h3>
+          <p class="book-author">By Abraham Silberschatz</p>
+          <div class="price-box">
+            <span class="current-price">₹550</span>
+            <span class="original-price">₹799</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Operating System Concepts', 550)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">40% OFF</span>
+        <div class="book-thumb">ME</div>
+        <div class="book-details">
+          <span class="branch-tag">Mechanical Engg</span>
+          <h3 class="book-title">Engineering Thermodynamics</h3>
+          <p class="book-author">By P.K. Nag</p>
+          <div class="price-box">
+            <span class="current-price">₹450</span>
+            <span class="original-price">₹750</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Engineering Thermodynamics', 450)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">25% OFF</span>
+        <div class="book-thumb">ME</div>
+        <div class="book-details">
+          <span class="branch-tag">Mechanical Engg</span>
+          <h3 class="book-title">Strength of Materials</h3>
+          <p class="book-author">By R.K. Bansal</p>
+          <div class="price-box">
+            <span class="current-price">₹520</span>
+            <span class="original-price">₹699</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Strength of Materials', 520)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">30% OFF</span>
+        <div class="book-thumb">ECE</div>
+        <div class="book-details">
+          <span class="branch-tag">Electronics & Comm</span>
+          <h3 class="book-title">Digital Design</h3>
+          <p class="book-author">By M. Morris Mano</p>
+          <div class="price-box">
+            <span class="current-price">₹490</span>
+            <span class="original-price">₹699</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Digital Design', 490)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">35% OFF</span>
+        <div class="book-thumb">CE</div>
+        <div class="book-details">
+          <span class="branch-tag">Civil Engineering</span>
+          <h3 class="book-title">Surveying Vol. 1 & 2</h3>
+          <p class="book-author">By B.C. Punmia</p>
+          <div class="price-box">
+            <span class="current-price">₹580</span>
+            <span class="original-price">₹899</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Surveying Vol. 1 & 2', 580)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">30% OFF</span>
+        <div class="book-thumb">EE</div>
+        <div class="book-details">
+          <span class="branch-tag">Electrical Engg</span>
+          <h3 class="book-title">Electrical Machinery</h3>
+          <p class="book-author">By P.S. Bimbhra</p>
+          <div class="price-box">
+            <span class="current-price">₹610</span>
+            <span class="original-price">₹870</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Electrical Machinery', 610)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <span class="offer-badge">40% OFF</span>
+        <div class="book-thumb">AI/DS</div>
+        <div class="book-details">
+          <span class="branch-tag">AI & Data Science</span>
+          <h3 class="book-title">Python for Data Analysis</h3>
+          <p class="book-author">By Wes McKinney</p>
+          <div class="price-box">
+            <span class="current-price">₹599</span>
+            <span class="original-price">₹999</span>
+          </div>
+          <a href="#checkout-modal" onclick="selectBook('Python for Data Analysis', 599)" class="btn-buy">Buy Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="checkout-modal" class="modal-target">
+    <div class="modal-box">
+      <a href="#" class="modal-close">&times;</a>
+      <h3>Checkout Order</h3>
+      <form id="orderForm">
+        <div class="form-group">
+          <label>Selected Book:</label>
+          <input type="text" id="selectedBook" readonly />
+        </div>
+        <div class="form-group">
+          <label>Amount (₹):</label>
+          <input type="text" id="selectedPrice" readonly />
+        </div>
+        <div class="form-group">
+          <label>Student Name:</label>
+          <input type="text" id="custName" placeholder="Enter full name" required />
+        </div>
+        <div class="form-group">
+          <label>Phone Number:</label>
+          <input type="tel" id="custPhone" placeholder="Enter phone number" required />
+        </div>
+        <div class="form-group">
+          <label>Delivery Address:</label>
+          <input type="text" id="custAddress" placeholder="Enter address / hostel no." required />
+        </div>
+        <button type="submit" class="pay-btn">Place Order (Cash on Delivery)</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://ddtbqlalhfokedxbhdhj.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_egINPJu1IQV6kYN4EXLF3A_8pIpi6qz";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentBook = '';
+    let currentPrice = 0;
+
+    function selectBook(title, price) {
+      currentBook = title;
+      currentPrice = price;
+      document.getElementById('selectedBook').value = title;
+      document.getElementById('selectedPrice').value = price;
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+
+      if (!currentBook || !name || !phone || !address) {
+        alert('Please fill all details.');
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from('orders')
+        .insert([
+          {
+            book_title: currentBook,
+            price: currentPrice,
+            customer_name: name,
+            phone: phone,
+            address: address,
+            status: 'Pending'
+          }
+        ]);
+
+      if (error) {
+        alert('Order Failed: ' + error.message);
+      } else {
+        alert('🎉 Order Successfully Placed!');
+        document.getElementById('orderForm').reset();
+        window.location.href = '#';
+      }
+    });
+  </script>
+</body>
+
+</html>
