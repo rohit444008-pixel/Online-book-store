@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="hi">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subharti TechBooks - Engineering Store</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .admin-link { background: #ffc107; color: #000; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: bold; margin-left: 10px; }
+    .admin-link:hover { background: #e0a800; }
+  </style>
 </head>
-
 <body>
+
   <div class="top-bar">🔥 SUBHARTI SPECIAL OFFER: Engineering Books Up To 40% OFF!</div>
 
   <header>
     <a href="#" class="logo">Subharti<span>TechBooks</span></a>
     <div class="cart-btn-wrapper">
       <a href="#checkout-modal" class="cart-btn">🛒 Checkout</a>
+      <a href="admin.html" class="admin-link">⚙️ Admin Panel</a>
     </div>
   </header>
 
@@ -28,6 +33,7 @@
     <h2 class="section-title">All Engineering Branches & Books Directory</h2>
 
     <div class="books-grid">
+      <!-- 1. CSE -->
       <div class="book-card">
         <span class="offer-badge">35% OFF</span>
         <div class="book-thumb">CSE</div>
@@ -43,6 +49,7 @@
         </div>
       </div>
 
+      <!-- 2. CSE -->
       <div class="book-card">
         <span class="offer-badge">30% OFF</span>
         <div class="book-thumb">CSE</div>
@@ -58,6 +65,7 @@
         </div>
       </div>
 
+      <!-- 3. Mechanical -->
       <div class="book-card">
         <span class="offer-badge">40% OFF</span>
         <div class="book-thumb">ME</div>
@@ -73,6 +81,7 @@
         </div>
       </div>
 
+      <!-- 4. Mechanical -->
       <div class="book-card">
         <span class="offer-badge">25% OFF</span>
         <div class="book-thumb">ME</div>
@@ -88,6 +97,7 @@
         </div>
       </div>
 
+      <!-- 5. ECE -->
       <div class="book-card">
         <span class="offer-badge">30% OFF</span>
         <div class="book-thumb">ECE</div>
@@ -103,6 +113,7 @@
         </div>
       </div>
 
+      <!-- 6. Civil -->
       <div class="book-card">
         <span class="offer-badge">35% OFF</span>
         <div class="book-thumb">CE</div>
@@ -118,6 +129,7 @@
         </div>
       </div>
 
+      <!-- 7. Electrical -->
       <div class="book-card">
         <span class="offer-badge">30% OFF</span>
         <div class="book-thumb">EE</div>
@@ -133,6 +145,7 @@
         </div>
       </div>
 
+      <!-- 8. AI & DS -->
       <div class="book-card">
         <span class="offer-badge">40% OFF</span>
         <div class="book-thumb">AI/DS</div>
@@ -147,9 +160,11 @@
           <a href="#checkout-modal" onclick="selectBook('Python for Data Analysis', 599)" class="btn-buy">Buy Now</a>
         </div>
       </div>
+
     </div>
   </div>
 
+  <!-- Checkout Modal -->
   <div id="checkout-modal" class="modal-target">
     <div class="modal-box">
       <a href="#" class="modal-close">&times;</a>
@@ -157,23 +172,23 @@
       <form id="orderForm">
         <div class="form-group">
           <label>Selected Book:</label>
-          <input type="text" id="selectedBook" readonly />
+          <input type="text" id="selectedBook" readonly>
         </div>
         <div class="form-group">
           <label>Amount (₹):</label>
-          <input type="text" id="selectedPrice" readonly />
+          <input type="text" id="selectedPrice" readonly>
         </div>
         <div class="form-group">
           <label>Student Name:</label>
-          <input type="text" id="custName" placeholder="Enter full name" required />
+          <input type="text" id="custName" placeholder="Enter full name" required>
         </div>
         <div class="form-group">
           <label>Phone Number:</label>
-          <input type="tel" id="custPhone" placeholder="Enter phone number" required />
+          <input type="tel" id="custPhone" placeholder="Enter phone number" required>
         </div>
         <div class="form-group">
           <label>Delivery Address:</label>
-          <input type="text" id="custAddress" placeholder="Enter address / hostel no." required />
+          <input type="text" id="custAddress" placeholder="Enter address / hostel no." required>
         </div>
         <button type="submit" class="pay-btn">Place Order (Cash on Delivery)</button>
       </form>
@@ -183,7 +198,7 @@
   <script>
     const SUPABASE_URL = "https://ddtbqlalhfokedxbhdhj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_egINPJu1IQV6kYN4EXLF3A_8pIpi6qz";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentBook = '';
     let currentPrice = 0;
@@ -195,40 +210,34 @@
       document.getElementById('selectedPrice').value = price;
     }
 
-    document.getElementById('orderForm').addEventListener('submit', async function (e) {
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const name = document.getElementById('custName').value.trim();
-      const phone = document.getElementById('custPhone').value.trim();
-      const address = document.getElementById('custAddress').value.trim();
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const address = document.getElementById('custAddress').value;
 
-      if (!currentBook || !name || !phone || !address) {
-        alert('Please fill all details.');
-        return;
-      }
-
-      const { error } = await supabaseClient
+      const { data, error } = await _supabase
         .from('orders')
         .insert([
-          {
-            book_title: currentBook,
-            price: currentPrice,
-            customer_name: name,
-            phone: phone,
-            address: address,
-            status: 'Pending'
+          { 
+            book_title: currentBook, 
+            price: currentPrice, 
+            customer_name: name, 
+            phone: phone, 
+            address: address, 
+            status: 'Pending' 
           }
         ]);
 
       if (error) {
-        alert('Order Failed: ' + error.message);
+        alert('Order Fail Ho Gaya: ' + error.message);
       } else {
-        alert('🎉 Order Successfully Placed!');
-        document.getElementById('orderForm').reset();
+        alert('🎉 Order Successfully Placed! Aapke paas confirmation aa jayegi.');
         window.location.href = '#';
+        document.getElementById('orderForm').reset();
       }
     });
   </script>
 </body>
-
 </html>
