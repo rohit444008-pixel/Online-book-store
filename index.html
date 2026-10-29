@@ -203,6 +203,9 @@
     function selectBook(title, price) {
       document.getElementById('selectedBook').value = title;
       document.getElementById('selectedPrice').value = price;
+      
+      // Yeh line ensure karegi ki click hote hi modal smoothly khul jaye
+      window.location.href = '#checkout-modal';
     }
 
     document.getElementById('orderForm').addEventListener('submit', async function(e) {
