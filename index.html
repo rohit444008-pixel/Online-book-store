@@ -196,16 +196,12 @@
   </div>
 
   <script>
+   <script>
     const SUPABASE_URL = "https://ddtbqlalhfokedxbhdhj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_egINPJu1IQV6kYN4EXLF3A_8pIpi6qz";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentBook = '';
-    let currentPrice = 0;
-
     function selectBook(title, price) {
-      currentBook = title;
-      currentPrice = price;
       document.getElementById('selectedBook').value = title;
       document.getElementById('selectedPrice').value = price;
     }
@@ -213,16 +209,24 @@
     document.getElementById('orderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
+      const bookTitle = document.getElementById('selectedBook').value;
+      const bookPrice = document.getElementById('selectedPrice').value;
       const name = document.getElementById('custName').value;
       const phone = document.getElementById('custPhone').value;
       const address = document.getElementById('custAddress').value;
+
+      // Check karein ki book select hui hai ya nahi
+      if (!bookTitle) {
+        alert('Pehle koi book "Buy Now" karke select karein!');
+        return;
+      }
 
       const { data, error } = await _supabase
         .from('orders')
         .insert([
           { 
-            book_title: currentBook, 
-            price: currentPrice, 
+            book_title: bookTitle, 
+            price: Number(bookPrice), 
             customer_name: name, 
             phone: phone, 
             address: address, 
@@ -234,10 +238,11 @@
         alert('Order Fail Ho Gaya: ' + error.message);
       } else {
         alert('🎉 Order Successfully Placed! Aapke paas confirmation aa jayegi.');
-        window.location.href = '#';
         document.getElementById('orderForm').reset();
+        window.location.href = '#'; // Modal close
       }
     });
+  </script>
   </script>
 </body>
 </html>
